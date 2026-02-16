@@ -97,17 +97,34 @@ def extended_gcd(a, b):
 
     return a, x0, y0
 
-
-def generate_d_and_e(p, q):
-    n = p*q
-    print(n)
-
 def generate_keys():
-    p, q = generate_p_and_q()
+    e = 65537
+
+    while True:
+        p, q = generate_p_and_q()
+        phi = (p-1) * (q-1)
+        g, x, y = extended_gcd(e, phi)
+        if g == 1:
+            break
+
     n = p * q
-    phy = (p-1) * (q-1)
-    
+    d = x % phi
+
+    return (e, n), (d, n)
+
 
 
 # Start o RSA public and private key generation
 public, private = generate_keys()
+e = public[0]
+n = public[1]
+d = private[0]
+
+message = 123456789
+
+ciphertext = pow(message, e, n)
+print("CIPHER: ", ciphertext)
+
+decipher = pow(ciphertext, d , n)
+print("\n\nDECIPHER: ", decipher)
+
