@@ -228,20 +228,9 @@ class AES_Encryption:
             print("Encription Failed")
 
 
-#AES_Encryption.test()
+AES_Encryption.test()
 
-def teste2():
-    aes = AES_Encryption(b"Thats my Kung Fu")
 
-    text = b"Esse texto tem mais de 16 bytes!!"
-
-    cipher = aes.encrypt_ecb(text)
-    decrypted = aes.decrypt_ecb(cipher)
-
-    print("Original :", text)
-    print("Decrypted:", decrypted)
-
-teste2()
 
 
 
