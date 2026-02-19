@@ -143,10 +143,37 @@ class AES_Encryption:
                 
         return round_keys
 
+    def _split_blocks(self, data):
+        blocks = []
+        for i in range(0, len(data), 16):
+            blocks.append(data[i:i+16])
+        return blocks
+
+    def encrypt_ecb(self, data):
+        state = self._pad(data)
+        blocks = self._split_blocks(state)
+
+        result = bytearray()
+
+        for block in blocks:
+            encrypted = self.encrypt(block)
+            result.extend(encrypted)
+        return result
+    
+    def decrypt_ecb(self, data):
+        blocks = self._split_blocks(data)
+        result = bytearray()
+
+        for block in  blocks:
+            decrypted = self.decrypt(block)
+            result.extend(decrypted)
+        result = self._unpad(result)
+        return bytes(result)
+
     # ENCRYPTION CALL
     def encrypt(self, plain_text_bytes):
         state = bytearray(plain_text_bytes)
-
+    
         # Step 0
         state = self._add_round_key(state, self.round_keys[0])
 
@@ -201,7 +228,20 @@ class AES_Encryption:
             print("Encription Failed")
 
 
-AES_Encryption.test()
+#AES_Encryption.test()
+
+def teste2():
+    aes = AES_Encryption(b"Thats my Kung Fu")
+
+    text = b"Esse texto tem mais de 16 bytes!!"
+
+    cipher = aes.encrypt_ecb(text)
+    decrypted = aes.decrypt_ecb(cipher)
+
+    print("Original :", text)
+    print("Decrypted:", decrypted)
+
+teste2()
 
 
 
